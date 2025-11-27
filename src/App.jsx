@@ -2,6 +2,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import SimpleForm from './components/SimpleForm'
+import ListaArticulos from './components/ListaArticulos'
 
 function App() {
 
@@ -17,6 +18,8 @@ function App() {
       </div>
       <h1>Uso de useForm()</h1>
       <SimpleForm />
+
+      <ListaArticulos />
       
     </>
   )
