@@ -1,16 +1,27 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
-    
-    const login = (username, password) => {
-        // Aquí iría la lógica real de autenticación
-        setUser({ username, password });
+
+    useEffect(() => {
+        // Aquí podrías cargar el usuario desde almacenamiento local o una API
+        const stored = localStorage.getItem("user");
+        if (stored) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setUser(JSON.parse(stored));
+        }
+    }, []);
+
+
+    const login = (userData) => {
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData); 
     };
 
     const logout = () => {
+        localStorage.removeItem("user");
         setUser(null);
     };
 
@@ -22,6 +33,4 @@ export function UserProvider({ children }) {
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function useUser() {
-    return useContext(UserContext);
-}
+export const useUser = () => useContext(UserContext);
