@@ -19,15 +19,34 @@ export default function PostCard({ post, onUpdated }) {
     onUpdated();
   };
 
+const handleDelete = async () => {
+    if (!confirm("¿Deseas eliminar esta publicación?")) return;
+
+    await client.delete(`/post/${post._id}`);
+    onUpdated();
+};
+
   return (
     <Card className="mb-3 shadow-sm">
+
       <Card.Body>
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between align-items-start">
           <strong>@{post.user_id.username}</strong>
-          <small className="text-muted">
-            {new Date(post.createdAt).toLocaleString()}
-            {isEdited && " · Editado"}
-          </small>
+          <div className="d-flex align-items-center gap2 text-muted ">
+            <small>
+                {new Date(post.createdAt).toLocaleString()}
+                {isEdited && " · Editado"}
+            </small>
+            {isOwner && (
+                <Button
+                variant="link"
+                size="sm"
+                className="p-0 text-danger"
+                onClick={handleDelete}>
+                    <i className="bi bi-trash"></i>
+                </Button>
+            )}
+          </div>
         </div>
 
         {!editing ? (
