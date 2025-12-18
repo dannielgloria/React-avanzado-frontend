@@ -1,34 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import client from "../service/client";
+import PostCard from "./PostCard";
 
 export default function PostList() {
-    const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await client.get("/post");
-                setPosts(response.data);
-            } catch (error) {
-                console.error("Error fetching posts:", error);
-            }
-        };
+  const fetchPosts = async () => {
+    const res = await client.get("/post");
+    setPosts(res.data);
+  };
 
-        fetchPosts();
-    }, []);
-    
-    return (
-        <div>
-            <h2>Lista de Posts</h2>
-            <ul>
-                {posts.map((post) => (
-                    <li key={post.id}>
-                        <h3>{post.title}</h3>
-                        <h4>{post.user_id.username}</h4>
-                        <p>{post.content}</p>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchPosts();
+  }, []);
+
+  return (
+    <>
+      {posts.map((post) => (
+        <PostCard key={post._id} post={post} onUpdated={fetchPosts} />
+      ))}
+    </>
+  );
 }
